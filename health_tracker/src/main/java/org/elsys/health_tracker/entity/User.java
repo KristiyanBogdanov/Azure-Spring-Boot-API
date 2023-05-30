@@ -10,11 +10,11 @@ import java.util.List;
 @Data
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false, referencedColumnName = "id")
     private Profile profile;
 
@@ -24,12 +24,12 @@ public class User {
     @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(64)")
     private String password; // sha256
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SleepStat> sleepStats;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MealStat> mealStats;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkoutStat> workoutStats;
 }

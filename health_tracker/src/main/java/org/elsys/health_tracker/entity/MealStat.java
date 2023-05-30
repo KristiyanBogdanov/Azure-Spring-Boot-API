@@ -3,14 +3,14 @@ package org.elsys.health_tracker.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "MealsStats")
 @Data
 public class MealStat {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -23,5 +23,5 @@ public class MealStat {
     private Meal meal;
 
     @Column(name = "date", nullable = false, columnDefinition = "DATE")
-    private Date date;
+    private LocalDate date;
 }

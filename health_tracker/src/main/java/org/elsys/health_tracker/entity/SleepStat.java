@@ -3,14 +3,14 @@ package org.elsys.health_tracker.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "SleepStats")
 @Data
 public class SleepStat {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -20,10 +20,10 @@ public class SleepStat {
     @Column(name = "duration", nullable = false, columnDefinition = "INTEGER")
     private Integer duration;
 
-    @ManyToOne
-    @JoinColumn(name = "quality_status_id", nullable = false, referencedColumnName = "id")
-    private SleepQualityStatus qualityStatus;
+    @Column(name = "quality_status", nullable = false, unique = true, columnDefinition = "VARCHAR(64)")
+    @Enumerated(EnumType.STRING)
+    private QualityStatus qualityStatus;
 
     @Column(name = "date", nullable = false, columnDefinition = "DATE")
-    private Date date;
+    private LocalDate date;
 }

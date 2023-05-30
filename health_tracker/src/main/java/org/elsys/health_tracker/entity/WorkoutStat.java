@@ -3,14 +3,14 @@ package org.elsys.health_tracker.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Workouts")
 @Data
 public class WorkoutStat {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -28,5 +28,5 @@ public class WorkoutStat {
     private String workoutBio;
 
     @Column(name = "date", nullable = false, columnDefinition = "DATE")
-    private Date date;
+    private LocalDate date;
 }

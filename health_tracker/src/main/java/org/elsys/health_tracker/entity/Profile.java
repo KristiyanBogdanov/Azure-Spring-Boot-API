@@ -3,23 +3,26 @@ package org.elsys.health_tracker.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Profiles")
 @Data
 public class Profile {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "gender_id", nullable = false, referencedColumnName = "id")
+    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = false, columnDefinition = "VARCHAR(64)")
     private Gender gender;
 
     @Column(name = "birthday", nullable = false, columnDefinition = "DATE")
-    private Date birthday;
+    private LocalDate birthday;
 
     @Column(name = "height", nullable = false, columnDefinition = "NUMERIC(3,2)")
     private float height;

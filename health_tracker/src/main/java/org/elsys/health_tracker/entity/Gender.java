@@ -1,19 +1,18 @@
 package org.elsys.health_tracker.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
+public enum Gender {
+    MALE("Male"),
+    FEMALE("Female"),
+    OTHER("Other"),
+    PREFER_NOT_TO_SAY("Prefer not to say");
 
-import java.util.List;
+    private final String displayName;
 
-@Entity
-@Table(name = "Genders")
-@Data
-public class Gender {
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private Long id;
+    Gender(String displayName) {
+        this.displayName = displayName;
+    }
 
-    @Column(name = "gender", nullable = false, unique = true, columnDefinition = "VARCHAR(64)")
-    private String gender;
+    public String getDisplayName() {
+        return displayName;
+    }
 }
