@@ -1,11 +1,14 @@
 package org.elsys.health_tracker.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.elsys.health_tracker.controller.resources.ProfileResource;
+import org.elsys.health_tracker.entity.Gender;
 import org.elsys.health_tracker.entity.Profile;
 import org.elsys.health_tracker.mapper.DateMapper;
 import org.elsys.health_tracker.repository.ProfileRepository;
 import org.elsys.health_tracker.service.ProfileService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,28 +32,45 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    public List<Gender> getAllGenders() {
+        return List.of(Gender.values());
+    }
+
+    @Override
     public ProfileResource create(ProfileResource profileResource) {
-        Profile profile = profileRepository.save(PROFILE_MAPPER.fromProfileResource(profileResource));
-        profileResource.setId(profile.getId());
-        return profileResource;
+        try {
+            Profile profile = profileRepository.save(PROFILE_MAPPER.fromProfileResource(profileResource));
+            profileResource.setId(profile.getId());
+            return profileResource;
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Profile with id " + profileResource.getId() + " already exists.");
+        }
     }
 
     @Override
     public ProfileResource update(ProfileResource profileResource, Long id) {
-        Profile profile = profileRepository.getReferenceById(id);
+        try {
+            Profile profile = profileRepository.getReferenceById(id);
 
-        profile.setGender(profileResource.getGender());
-        profile.setBirthday(DateMapper.toSQLDate(profileResource.getBirthday()));
-        profile.setHeight(profileResource.getHeight());
-        profile.setWeight(profileResource.getWeight());
-        profile.setBodyFat(profileResource.getBodyFat());
-        profile.setHealthBio(profileResource.getHealthBio());
+            profile.setGender(profileResource.getGender());
+            profile.setBirthday(DateMapper.toSQLDate(profileResource.getBirthday()));
+            profile.setHeight(profileResource.getHeight());
+            profile.setWeight(profileResource.getWeight());
+            profile.setBodyFat(profileResource.getBodyFat());
+            profile.setHealthBio(profileResource.getHealthBio());
 
-        return PROFILE_MAPPER.toProfileResource(profileRepository.save(profile));
+            return PROFILE_MAPPER.toProfileResource(profileRepository.save(profile));
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException("Unable to find profile with id " + id + ".");
+        }
     }
 
     @Override
     public void delete(Long id) {
-        profileRepository.deleteById(id);
+        if (profileRepository.existsById(id)) {
+            profileRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("Unable to find profile with id " + id + ".");
+        }
     }
 }

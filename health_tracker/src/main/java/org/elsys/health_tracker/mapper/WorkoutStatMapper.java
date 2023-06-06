@@ -1,5 +1,6 @@
 package org.elsys.health_tracker.mapper;
 
+import org.elsys.health_tracker.controller.resources.UserWorkoutStatResource;
 import org.elsys.health_tracker.controller.resources.WorkoutStatResource;
 import org.elsys.health_tracker.entity.WorkoutStat;
 import org.mapstruct.InheritInverseConfiguration;
@@ -16,6 +17,7 @@ import java.util.List;
 public interface WorkoutStatMapper {
     WorkoutStatMapper WORKOUT_STAT_MAPPER = Mappers.getMapper(WorkoutStatMapper.class);
 
+    @Mapping(target = "user.id", source = "userId")
     @Mapping(target = "date", source = "date", qualifiedByName = "mapStringToLocalDate")
     WorkoutStat fromWorkoutStatResource(WorkoutStatResource workoutStatResource);
 
@@ -24,6 +26,15 @@ public interface WorkoutStatMapper {
     WorkoutStatResource toWorkoutStatResource(WorkoutStat workoutStat);
 
     List<WorkoutStatResource> toWorkoutStatResources(List<WorkoutStat> workoutStats);
+
+    @Mapping(target = "date", source = "date", qualifiedByName = "mapStringToLocalDate")
+    WorkoutStat fromUserWorkoutStatResource(UserWorkoutStatResource userWorkoutStatResource);
+
+    @InheritInverseConfiguration
+    @Mapping(target = "date", source = "date", qualifiedByName = "mapLocalDateToString")
+    UserWorkoutStatResource toUserWorkoutStatResource(WorkoutStat workoutStat);
+
+    List<UserWorkoutStatResource> toUserWorkoutStatResources(List<WorkoutStat> workoutStats);
 
     @Named("mapStringToLocalDate")
     default LocalDate mapStringToLocalDate(String date) {

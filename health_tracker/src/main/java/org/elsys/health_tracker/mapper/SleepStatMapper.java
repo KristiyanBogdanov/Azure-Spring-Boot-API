@@ -1,6 +1,7 @@
 package org.elsys.health_tracker.mapper;
 
 import org.elsys.health_tracker.controller.resources.SleepStatResource;
+import org.elsys.health_tracker.controller.resources.UserSleepStatResource;
 import org.elsys.health_tracker.entity.SleepStat;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
@@ -15,6 +16,7 @@ import java.util.List;
 public interface SleepStatMapper {
     SleepStatMapper SLEEP_STAT_MAPPER = Mappers.getMapper(SleepStatMapper.class);
 
+    @Mapping(target = "user.id", source = "userId")
     @Mapping(target = "date", source = "date", qualifiedByName = "mapStringToLocalDate")
     SleepStat fromSleepStatResource(SleepStatResource sleepStatResource);
 
@@ -23,6 +25,15 @@ public interface SleepStatMapper {
     SleepStatResource toSleepStatResource(SleepStat sleepStat);
 
     List<SleepStatResource> toSleepStatResources(List<SleepStat> sleepStats);
+
+    @Mapping(target = "date", source = "date", qualifiedByName = "mapStringToLocalDate")
+    SleepStat fromUserSleepStatResource(UserSleepStatResource userSleepStatResource);
+
+    @InheritInverseConfiguration
+    @Mapping(target = "date", source = "date", qualifiedByName = "mapLocalDateToString")
+    UserSleepStatResource toUserSleepStatResource(SleepStat sleepStat);
+
+    List<UserSleepStatResource> toUserSleepStatResources(List<SleepStat> sleepStats);
 
     @Named("mapStringToLocalDate")
     default LocalDate mapStringToLocalDate(String date) {
