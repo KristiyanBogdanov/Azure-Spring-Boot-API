@@ -51,10 +51,19 @@ public class MealServiceImpl implements MealService {
         }
     }
 
+    private boolean isMealUnchanged(MealResource mealResource, Meal meal) {
+        return mealResource.getName().equals(meal.getName())
+                && mealResource.getCalories().equals(meal.getCalories());
+    }
+
     @Override
     public MealResource update(MealResource mealResource, Long id) {
         try {
             Meal meal = mealRepository.getReferenceById(id);
+
+            if (isMealUnchanged(mealResource, meal)) {
+                throw new DuplicateEntityFieldException("Meal is unchanged.");
+            }
 
             meal.setName(mealResource.getName());
             meal.setCalories(mealResource.getCalories());

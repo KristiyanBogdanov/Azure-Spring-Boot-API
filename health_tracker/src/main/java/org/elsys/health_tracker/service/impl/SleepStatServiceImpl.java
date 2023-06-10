@@ -71,7 +71,7 @@ public class SleepStatServiceImpl implements SleepStatService {
             SleepStat sleepStat = sleepStatRepository.getReferenceById(id);
 
             if (isSleepStatUnchanged(sleepStatResource, sleepStat)) {
-                throw new DuplicateEntityFieldException("Sleep stat with is unchanged.");
+                throw new DuplicateEntityFieldException("Sleep stat is unchanged.");
             }
 
             sleepStat.setDuration(sleepStatResource.getDuration());
