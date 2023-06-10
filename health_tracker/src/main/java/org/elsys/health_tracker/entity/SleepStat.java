@@ -18,9 +18,9 @@ public class SleepStat {
     private User user;
 
     @Column(name = "duration", nullable = false, columnDefinition = "INTEGER")
-    private Integer duration;
+    private Integer duration; // in minutes
 
-    @Column(name = "quality_status", nullable = false, unique = true, columnDefinition = "VARCHAR(64)")
+    @Column(name = "quality_status", nullable = false, columnDefinition = "VARCHAR(64)")
     @Enumerated(EnumType.STRING)
     private QualityStatus qualityStatus;
 

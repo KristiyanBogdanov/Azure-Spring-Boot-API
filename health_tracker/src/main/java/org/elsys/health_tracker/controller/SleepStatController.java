@@ -1,14 +1,11 @@
 package org.elsys.health_tracker.controller;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.elsys.health_tracker.controller.resources.SleepStatResource;
 import org.elsys.health_tracker.service.SleepStatService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/sleep-stats")
@@ -23,13 +20,7 @@ public class SleepStatController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-        Optional<SleepStatResource> sleepStatResource = sleepStatService.getById(id);
-
-        if (sleepStatResource.isPresent()) {
-            return ResponseEntity.ok(sleepStatResource.get());
-        } else {
-            throw new EntityNotFoundException("Unable to find sleepStat with id " + id + ".");
-        }
+        return ResponseEntity.ok(sleepStatService.getById(id));
     }
 
     @GetMapping("/quality-statuses")

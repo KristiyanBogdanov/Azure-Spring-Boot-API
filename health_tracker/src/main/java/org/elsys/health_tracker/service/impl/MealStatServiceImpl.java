@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.elsys.health_tracker.controller.resources.MealStatResource;
 import org.elsys.health_tracker.controller.resources.UserMealStatResource;
 import org.elsys.health_tracker.entity.MealStat;
+import org.elsys.health_tracker.exception.DuplicateEntityFieldException;
 import org.elsys.health_tracker.mapper.DateMapper;
 import org.elsys.health_tracker.repository.MealStatRepository;
 import org.elsys.health_tracker.service.MealStatService;
@@ -12,7 +13,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.elsys.health_tracker.mapper.MealStatMapper.MEAL_STAT_MAPPER;
 
@@ -27,13 +27,19 @@ public class MealStatServiceImpl implements MealStatService {
     }
 
     @Override
-    public Optional<MealStatResource> getById(Long id) {
-        return mealStatRepository.findById(id).map(MEAL_STAT_MAPPER::toMealStatResource);
+    public MealStatResource getById(Long id) {
+        MealStat mealStat = mealStatRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find meal stat with id " + id + "."));
+
+        return MEAL_STAT_MAPPER.toMealStatResource(mealStat);
     }
 
     @Override
-    public Optional<List<UserMealStatResource>> getAllByUserId(Long userId) {
-        return mealStatRepository.findAllByUserId(userId).map(MEAL_STAT_MAPPER::toUserMealStatResources);
+    public List<UserMealStatResource> getAllByUserId(Long userId) {
+        List<MealStat> mealStats = mealStatRepository.findAllByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find meal stats for user with id " + userId + "."));
+
+        return MEAL_STAT_MAPPER.toUserMealStatResources(mealStats);
     }
 
     @Override
@@ -47,12 +53,20 @@ public class MealStatServiceImpl implements MealStatService {
         }
     }
 
+    private boolean isMealStatUnchanged(MealStatResource mealStatResource, MealStat mealStat) {
+        return mealStatResource.getDate().equals(DateMapper.toString(mealStat.getDate()));
+    }
+
     @Override
     public MealStatResource update(MealStatResource mealStatResource, Long id) {
         try {
             MealStat mealStat = mealStatRepository.getReferenceById(id);
 
-            // TODO: add update logic for meal
+            if (isMealStatUnchanged(mealStatResource, mealStat)) {
+                throw new DuplicateEntityFieldException("Meal stat is unchanged.");
+            }
+
+            // TODO: add update logic for meal?
             mealStat.setDate(DateMapper.toSQLDate(mealStatResource.getDate()));
 
             return MEAL_STAT_MAPPER.toMealStatResource(mealStatRepository.save(mealStat));

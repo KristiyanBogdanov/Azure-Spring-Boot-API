@@ -8,6 +8,8 @@ import org.elsys.health_tracker.exception.DuplicateEntityFieldException;
 import org.elsys.health_tracker.repository.UserRepository;
 import org.elsys.health_tracker.service.*;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final MealStatService mealStatService;
     private final SleepStatService sleepStatService;
     private final WorkoutStatService workoutStatService;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
     @Override
     public List<UserResource> getAll() {
@@ -30,8 +33,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserResource> getById(Long id) {
-        return userRepository.findById(id).map(USER_MAPPER::toUserResource);
+    public UserResource getById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find user with id " + id + "."));
+
+        return USER_MAPPER.toUserResource(user);
     }
 
     @Override
@@ -39,9 +45,14 @@ public class UserServiceImpl implements UserService {
        try {
            User user = userRepository.getReferenceById(id);
 
-           // TODO: I know
+           // TODO: I know what I have to do.
            user.setUsername(userResource.getUsername());
-           user.setPassword(userResource.getPassword());
+
+           if (!passwordEncoder.matches(userResource.getPassword(), user.getPassword())) {
+               user.setPassword(passwordEncoder.encode(userResource.getPassword()));
+           } else {
+               throw new DuplicateEntityFieldException("Password is the same as the old one.");
+           }
 
            return USER_MAPPER.toUserResource(userRepository.save(user));
        } catch (EntityNotFoundException e) {
@@ -50,7 +61,6 @@ public class UserServiceImpl implements UserService {
            throw new DuplicateEntityFieldException("Username already exists.");
        }
     }
-
 
     @Override
     public void delete(Long id) {

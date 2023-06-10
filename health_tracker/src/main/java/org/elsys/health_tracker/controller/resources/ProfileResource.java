@@ -1,7 +1,10 @@
 package org.elsys.health_tracker.controller.resources;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.elsys.health_tracker.entity.Gender;
 
@@ -15,15 +18,19 @@ public class ProfileResource {
     @NotEmpty
     private String birthday;
 
+    @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
-    private float height;
+    private Float height;
 
+    @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
-    private float weight;
+    private Float weight;
 
+    @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
+    @DecimalMax(value = "100.0", inclusive = false)
     @JsonProperty("body_fat")
-    private float bodyFat;
+    private Float bodyFat;
 
     @JsonProperty("health_bio")
     private String healthBio;

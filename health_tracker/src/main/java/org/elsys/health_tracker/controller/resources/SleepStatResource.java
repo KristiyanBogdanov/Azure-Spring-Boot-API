@@ -15,6 +15,7 @@ public class SleepStatResource {
     @JsonProperty("user_id")
     private Long userId;
 
+    @NotNull
     @Min(1)
     private Integer duration;
 

@@ -5,13 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.elsys.health_tracker.controller.resources.UserWorkoutStatResource;
 import org.elsys.health_tracker.controller.resources.WorkoutStatResource;
 import org.elsys.health_tracker.entity.WorkoutStat;
+import org.elsys.health_tracker.exception.DuplicateEntityFieldException;
+import org.elsys.health_tracker.mapper.DateMapper;
 import org.elsys.health_tracker.repository.WorkoutStatRepository;
 import org.elsys.health_tracker.service.WorkoutStatService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.elsys.health_tracker.mapper.WorkoutStatMapper.WORKOUT_STAT_MAPPER;
 
@@ -26,13 +27,19 @@ public class WorkoutStatServiceImpl implements WorkoutStatService {
     }
 
     @Override
-    public Optional<WorkoutStatResource> getById(Long id) {
-        return workoutStatRepository.findById(id).map(WORKOUT_STAT_MAPPER::toWorkoutStatResource);
+    public WorkoutStatResource getById(Long id) {
+        WorkoutStat workoutStat = workoutStatRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find workout stat with id: " + id + "."));
+
+        return WORKOUT_STAT_MAPPER.toWorkoutStatResource(workoutStat);
     }
 
     @Override
-    public Optional<List<UserWorkoutStatResource>> getAllByUserId(Long userId) {
-        return workoutStatRepository.findAllByUserId(userId).map(WORKOUT_STAT_MAPPER::toUserWorkoutStatResources);
+    public List<UserWorkoutStatResource> getAllByUserId(Long userId) {
+        List<WorkoutStat> workoutStats = workoutStatRepository.findAllByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find workout stats for user with id: " + userId + "."));
+
+        return WORKOUT_STAT_MAPPER.toUserWorkoutStatResources(workoutStats);
     }
 
     @Override
@@ -46,14 +53,26 @@ public class WorkoutStatServiceImpl implements WorkoutStatService {
         }
     }
 
+    private boolean isWorkoutStatUnchanged(WorkoutStatResource workoutStatResource, WorkoutStat workoutStat) {
+        return workoutStatResource.getDuration().equals(workoutStat.getDuration())
+                && workoutStatResource.getBurnedCalories().equals(workoutStat.getBurnedCalories())
+                && workoutStatResource.getWorkoutBio().equals(workoutStat.getWorkoutBio())
+                && workoutStatResource.getDate().equals(DateMapper.toString(workoutStat.getDate()));
+    }
+
     @Override
     public WorkoutStatResource update(WorkoutStatResource workoutStatResource, Long id) {
         try {
             WorkoutStat workoutStat = workoutStatRepository.getReferenceById(id);
 
+            if (isWorkoutStatUnchanged(workoutStatResource, workoutStat)) {
+                throw new DuplicateEntityFieldException("Workout stat is unchanged.");
+            }
+
             workoutStat.setDuration(workoutStatResource.getDuration());
             workoutStat.setBurnedCalories(workoutStatResource.getBurnedCalories());
             workoutStat.setWorkoutBio(workoutStatResource.getWorkoutBio());
+            workoutStat.setDate(DateMapper.toSQLDate(workoutStatResource.getDate()));
 
             return WORKOUT_STAT_MAPPER.toWorkoutStatResource(workoutStatRepository.save(workoutStat));
         } catch (DataIntegrityViolationException e) {

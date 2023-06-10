@@ -9,6 +9,8 @@ import org.elsys.health_tracker.exception.InvalidCredentialsException;
 import org.elsys.health_tracker.repository.UserRepository;
 import org.elsys.health_tracker.service.AuthService;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static org.elsys.health_tracker.mapper.AuthMapper.MAPPER;
@@ -17,13 +19,18 @@ import static org.elsys.health_tracker.mapper.AuthMapper.MAPPER;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
+    private final ProfileAuditServiceImpl profileAuditService;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
     @Override
     public AuthResponse register(RegisterRequest registerRequest) {
         User user = MAPPER.fromRegisterRequest(registerRequest);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         try {
-            return MAPPER.toAuthResponse(userRepository.save(user));
+            User savedUser = userRepository.save(user);
+            profileAuditService.afterInsert(savedUser.getProfile());
+            return MAPPER.toAuthResponse(savedUser);
         } catch (DataIntegrityViolationException e) {
             throw new InvalidCredentialsException("User with username " + registerRequest.getUsername() + " already exists.");
         }
@@ -34,10 +41,10 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid username."));
 
-        if (!user.getPassword().equals(loginRequest.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Invalid password.");
+        } else {
+            return MAPPER.toAuthResponse(user);
         }
-
-        return MAPPER.toAuthResponse(user);
     }
 }

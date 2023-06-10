@@ -5,14 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.elsys.health_tracker.controller.resources.ProfileResource;
 import org.elsys.health_tracker.entity.Gender;
 import org.elsys.health_tracker.entity.Profile;
+import org.elsys.health_tracker.exception.DuplicateEntityFieldException;
 import org.elsys.health_tracker.mapper.DateMapper;
 import org.elsys.health_tracker.repository.ProfileRepository;
+import org.elsys.health_tracker.service.ProfileAuditService;
 import org.elsys.health_tracker.service.ProfileService;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import static org.elsys.health_tracker.mapper.ProfileMapper.PROFILE_MAPPER;
 
@@ -20,6 +21,7 @@ import static org.elsys.health_tracker.mapper.ProfileMapper.PROFILE_MAPPER;
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
+    private final ProfileAuditService profileAuditService;
 
     @Override
     public List<ProfileResource> getAll() {
@@ -27,8 +29,11 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Optional<ProfileResource> getById(Long id) {
-        return profileRepository.findById(id).map(PROFILE_MAPPER::toProfileResource);
+    public ProfileResource getById(Long id) {
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find profile with id " + id + "."));
+
+        return PROFILE_MAPPER.toProfileResource(profile);
     }
 
     @Override
@@ -36,21 +41,23 @@ public class ProfileServiceImpl implements ProfileService {
         return List.of(Gender.values());
     }
 
-    @Override
-    public ProfileResource create(ProfileResource profileResource) {
-        try {
-            Profile profile = profileRepository.save(PROFILE_MAPPER.fromProfileResource(profileResource));
-            profileResource.setId(profile.getId());
-            return profileResource;
-        } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("Profile with id " + profileResource.getId() + " already exists.");
-        }
+    private boolean isProfileUnchanged(ProfileResource profileResource, Profile profile) {
+        return profileResource.getGender().equals(profile.getGender())
+                && profileResource.getBirthday().equals(DateMapper.toString(profile.getBirthday()))
+                && profileResource.getHeight().equals(profile.getHeight())
+                && profileResource.getWeight().equals(profile.getWeight())
+                && profileResource.getBodyFat().equals(profile.getBodyFat())
+                && profileResource.getHealthBio().equals(profile.getHealthBio());
     }
 
     @Override
     public ProfileResource update(ProfileResource profileResource, Long id) {
         try {
             Profile profile = profileRepository.getReferenceById(id);
+
+            if (isProfileUnchanged(profileResource, profile)) {
+                throw new DuplicateEntityFieldException("Profile is unchanged.");
+            }
 
             profile.setGender(profileResource.getGender());
             profile.setBirthday(DateMapper.toSQLDate(profileResource.getBirthday()));
@@ -59,7 +66,10 @@ public class ProfileServiceImpl implements ProfileService {
             profile.setBodyFat(profileResource.getBodyFat());
             profile.setHealthBio(profileResource.getHealthBio());
 
-            return PROFILE_MAPPER.toProfileResource(profileRepository.save(profile));
+            Profile savedProfile = profileRepository.save(profile);
+            profileAuditService.afterUpdate(profile);
+
+            return PROFILE_MAPPER.toProfileResource(savedProfile);
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("Unable to find profile with id " + id + ".");
         }
@@ -69,6 +79,7 @@ public class ProfileServiceImpl implements ProfileService {
     public void delete(Long id) {
         if (profileRepository.existsById(id)) {
             profileRepository.deleteById(id);
+            profileAuditService.afterDelete(id);
         } else {
             throw new EntityNotFoundException("Unable to find profile with id " + id + ".");
         }

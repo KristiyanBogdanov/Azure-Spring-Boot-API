@@ -21,8 +21,8 @@ public class User {
     @Column(name = "username", nullable = false, unique = true, columnDefinition = "VARCHAR(30)")
     private String username;
 
-    @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(64)")
-    private String password; // sha256
+    @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(72)")
+    private String password; // bcrypt hash
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SleepStat> sleepStats;

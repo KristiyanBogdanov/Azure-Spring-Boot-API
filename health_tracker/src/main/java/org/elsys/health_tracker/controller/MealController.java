@@ -1,6 +1,5 @@
 package org.elsys.health_tracker.controller;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.elsys.health_tracker.controller.resources.MealResource;
@@ -8,8 +7,6 @@ import org.elsys.health_tracker.service.MealService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/meals")
@@ -24,24 +21,12 @@ public class MealController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-        Optional<MealResource> mealResource = mealService.getById(id);
-
-        if (mealResource.isPresent()) {
-            return ResponseEntity.ok(mealResource.get());
-        } else {
-            throw new EntityNotFoundException("Unable to find meal with id " + id + ".");
-        }
+        return ResponseEntity.ok(mealService.getById(id));
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<?> getByName(@PathVariable("name") String name) {
-        Optional<MealResource> mealResource = mealService.getByName(name);
-
-        if (mealResource.isPresent()) {
-            return ResponseEntity.ok(mealResource.get());
-        } else {
-            throw new EntityNotFoundException("Unable to find meal with name " + name + ".");
-        }
+        return ResponseEntity.ok(mealService.getByName(name));
     }
 
     @PostMapping

@@ -11,7 +11,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.elsys.health_tracker.mapper.MealMapper.MEAL_MAPPER;
 
@@ -26,13 +25,19 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Optional<MealResource> getById(Long id) {
-        return mealRepository.findById(id).map(MEAL_MAPPER::toMealResource);
+    public MealResource getById(Long id) {
+        Meal meal = mealRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find meal with id " + id + "."));
+
+        return MEAL_MAPPER.toMealResource(meal);
     }
 
     @Override
-    public Optional<MealResource> getByName(String name) {
-        return mealRepository.findByName(name).map(MEAL_MAPPER::toMealResource);
+    public MealResource getByName(String name) {
+        Meal meal = mealRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find meal with name " + name + "."));
+
+        return MEAL_MAPPER.toMealResource(meal);
     }
 
     @Override

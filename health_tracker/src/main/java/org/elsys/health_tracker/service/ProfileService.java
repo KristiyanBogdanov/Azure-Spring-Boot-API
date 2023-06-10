@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface ProfileService {
     List<ProfileResource> getAll();
-    Optional<ProfileResource> getById(Long id);
+    ProfileResource getById(Long id);
     List<Gender> getAllGenders();
-    ProfileResource create(ProfileResource profileResource);
+//    ProfileResource findLastRevisionBeforeDate(Long profileId, String date);
     ProfileResource update(ProfileResource profileResource, Long id);
     void delete(Long id);
 }

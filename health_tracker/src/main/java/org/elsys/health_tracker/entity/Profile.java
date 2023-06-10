@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+
 @Entity
 @Table(name = "Profiles")
 @Data
@@ -25,13 +26,13 @@ public class Profile {
     private LocalDate birthday;
 
     @Column(name = "height", nullable = false, columnDefinition = "NUMERIC(3,2)")
-    private float height;
+    private Float height;
 
     @Column(name = "weight", nullable = false, columnDefinition = "NUMERIC(4,1)")
-    private float weight;
+    private Float weight;
 
     @Column(name = "body_fat", nullable = false, columnDefinition = "NUMERIC(3,1)")
-    private float bodyFat;
+    private Float bodyFat;
 
     @Column(name = "health_bio", columnDefinition = "TEXT")
     private String healthBio;

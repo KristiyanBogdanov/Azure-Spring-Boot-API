@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface MealService {
     List<MealResource> getAll();
-    Optional<MealResource> getById(Long id);
-    Optional<MealResource> getByName(String name);
+    MealResource getById(Long id);
+    MealResource getByName(String name);
     MealResource create(MealResource mealResource);
     MealResource update(MealResource mealResource, Long id);
     void delete(Long id);

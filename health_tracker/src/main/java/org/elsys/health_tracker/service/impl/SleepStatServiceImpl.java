@@ -6,6 +6,7 @@ import org.elsys.health_tracker.controller.resources.SleepStatResource;
 import org.elsys.health_tracker.controller.resources.UserSleepStatResource;
 import org.elsys.health_tracker.entity.QualityStatus;
 import org.elsys.health_tracker.entity.SleepStat;
+import org.elsys.health_tracker.exception.DuplicateEntityFieldException;
 import org.elsys.health_tracker.mapper.DateMapper;
 import org.elsys.health_tracker.repository.SleepStatRepository;
 import org.elsys.health_tracker.service.SleepStatService;
@@ -13,7 +14,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.elsys.health_tracker.mapper.SleepStatMapper.SLEEP_STAT_MAPPER;
 
@@ -28,8 +28,11 @@ public class SleepStatServiceImpl implements SleepStatService {
     }
 
     @Override
-    public Optional<SleepStatResource> getById(Long id) {
-        return sleepStatRepository.findById(id).map(SLEEP_STAT_MAPPER::toSleepStatResource);
+    public SleepStatResource getById(Long id) {
+        SleepStat sleepStat = sleepStatRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find sleep stat with id " + id + "."));
+
+        return SLEEP_STAT_MAPPER.toSleepStatResource(sleepStat);
     }
 
     @Override
@@ -38,8 +41,11 @@ public class SleepStatServiceImpl implements SleepStatService {
     }
 
     @Override
-    public Optional<List<UserSleepStatResource>> getAllByUserId(Long userId) {
-        return sleepStatRepository.findAllByUserId(userId).map(SLEEP_STAT_MAPPER::toUserSleepStatResources);
+    public List<UserSleepStatResource> getAllByUserId(Long userId) {
+        List<SleepStat> sleepStats = sleepStatRepository.findAllByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find sleep stats for user with id " + userId + "."));
+
+        return SLEEP_STAT_MAPPER.toUserSleepStatResources(sleepStats);
     }
 
     @Override
@@ -53,10 +59,20 @@ public class SleepStatServiceImpl implements SleepStatService {
         }
     }
 
+    private boolean isSleepStatUnchanged(SleepStatResource sleepStatResource, SleepStat sleepStat) {
+        return sleepStatResource.getDuration().equals(sleepStat.getDuration())
+                && sleepStatResource.getQualityStatus() == sleepStat.getQualityStatus()
+                && sleepStatResource.getDate().equals(DateMapper.toString(sleepStat.getDate()));
+    }
+
     @Override
     public SleepStatResource update(SleepStatResource sleepStatResource, Long id) {
         try {
             SleepStat sleepStat = sleepStatRepository.getReferenceById(id);
+
+            if (isSleepStatUnchanged(sleepStatResource, sleepStat)) {
+                throw new DuplicateEntityFieldException("Sleep stat with is unchanged.");
+            }
 
             sleepStat.setDuration(sleepStatResource.getDuration());
             sleepStat.setQualityStatus(sleepStatResource.getQualityStatus());

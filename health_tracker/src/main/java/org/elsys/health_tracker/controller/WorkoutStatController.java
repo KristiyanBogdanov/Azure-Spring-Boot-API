@@ -1,6 +1,5 @@
 package org.elsys.health_tracker.controller;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.elsys.health_tracker.controller.resources.WorkoutStatResource;
@@ -8,10 +7,8 @@ import org.elsys.health_tracker.service.WorkoutStatService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("api/v1/workout-stats")
+@RequestMapping("api/v1/workouts-stats")
 @RequiredArgsConstructor
 public class WorkoutStatController {
     private final WorkoutStatService workoutStatService;
@@ -23,13 +20,7 @@ public class WorkoutStatController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-        Optional<WorkoutStatResource> workoutStatResource = workoutStatService.getById(id);
-
-        if (workoutStatResource.isPresent()) {
-            return ResponseEntity.ok(workoutStatResource.get());
-        } else {
-            throw new EntityNotFoundException("Unable to find workoutStat with id " + id + ".");
-        }
+        return ResponseEntity.ok(workoutStatService.getById(id));
     }
 
     @PostMapping

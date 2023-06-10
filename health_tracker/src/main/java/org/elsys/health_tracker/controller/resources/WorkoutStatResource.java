@@ -14,9 +14,11 @@ public class WorkoutStatResource {
     @JsonProperty("user_id")
     private Long userId;
 
+    @NotNull
     @Min(1)
     private Integer duration;
 
+    @NotNull
     @Min(1)
     @JsonProperty("burned_calories")
     private Integer burnedCalories;
