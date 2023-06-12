@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/meals")
 @RequiredArgsConstructor
@@ -15,22 +17,22 @@ public class MealController {
     private final MealService mealService;
 
     @GetMapping
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<List<MealResource>> getAll() {
         return ResponseEntity.ok(mealService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<MealResource> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(mealService.getById(id));
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<?> getByName(@PathVariable("name") String name) {
+    public ResponseEntity<MealResource> getByName(@PathVariable("name") String name) {
         return ResponseEntity.ok(mealService.getByName(name));
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody MealResource mealResource) {
+    public ResponseEntity<MealResource> create(@Valid @RequestBody MealResource mealResource) {
         MealResource createdMeal = mealService.create(mealResource);
 
         return ResponseEntity.created(
@@ -39,7 +41,7 @@ public class MealController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody MealResource mealResource, @PathVariable("id") Long id) {
+    public ResponseEntity<MealResource> update(@Valid @RequestBody MealResource mealResource, @PathVariable("id") Long id) {
         return ResponseEntity.ok(mealService.update(mealResource, id));
     }
 

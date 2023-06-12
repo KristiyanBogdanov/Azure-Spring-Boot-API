@@ -17,10 +17,10 @@ public class ProfileAudit {
     @Column(name = "uid")
     private Long uid;
 
-    @Column(name = "begin_date", nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "begin_date", nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime beginDate;
 
-    @Column(name = "end_date", columnDefinition = "TIMESTAMP")
+    @Column(name = "end_date", columnDefinition = "DATETIME")
     private LocalDateTime endDate;
 
     @Column(name = "profile_id", nullable = false, columnDefinition = "BIGINT")

@@ -7,6 +7,8 @@ import org.elsys.health_tracker.service.WorkoutStatService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/workouts-stats")
 @RequiredArgsConstructor
@@ -14,17 +16,17 @@ public class WorkoutStatController {
     private final WorkoutStatService workoutStatService;
 
     @GetMapping
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<List<WorkoutStatResource>> getAll() {
         return ResponseEntity.ok(workoutStatService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<WorkoutStatResource> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(workoutStatService.getById(id));
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody WorkoutStatResource workoutStatResource) {
+    public ResponseEntity<WorkoutStatResource> create(@Valid @RequestBody WorkoutStatResource workoutStatResource) {
         WorkoutStatResource createdWorkoutStat = workoutStatService.create(workoutStatResource);
 
         return ResponseEntity.created(
@@ -33,7 +35,7 @@ public class WorkoutStatController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody WorkoutStatResource workoutStatResource, @PathVariable("id") Long id) {
+    public ResponseEntity<WorkoutStatResource> update(@Valid @RequestBody WorkoutStatResource workoutStatResource, @PathVariable("id") Long id) {
         return ResponseEntity.ok(workoutStatService.update(workoutStatResource, id));
     }
 
