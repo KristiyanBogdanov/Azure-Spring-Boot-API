@@ -50,7 +50,7 @@ public class WorkoutStatController {
         ).body(createdWorkoutStat);
     }
 
-    @Operation(summary = "Update a workout stat")
+    @Operation(summary = "Update a workout stat by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Workout stat updated successfully"),
             @ApiResponse(responseCode = "404", description = "Workout stat not found", content = @Content(mediaType = "text/plain")),
@@ -61,7 +61,7 @@ public class WorkoutStatController {
         return ResponseEntity.ok(workoutStatService.update(workoutStatResource, id));
     }
 
-    @Operation(summary = "Delete a workout stat")
+    @Operation(summary = "Delete a workout stat by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Workout stat deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Workout stat not found", content = @Content(mediaType = "text/plain"))

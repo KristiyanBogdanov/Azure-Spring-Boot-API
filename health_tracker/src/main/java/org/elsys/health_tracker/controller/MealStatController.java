@@ -50,7 +50,7 @@ public class MealStatController {
         ).body(createdMealStat);
     }
 
-    @Operation(summary = "Update a meal stat")
+    @Operation(summary = "Update a meal stat by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Meal stat updated successfully"),
             @ApiResponse(responseCode = "404", description = "Meal stat not found", content = @Content(mediaType = "text/plain")),
@@ -61,7 +61,7 @@ public class MealStatController {
         return ResponseEntity.ok(mealStatService.update(mealStatResource, id));
     }
 
-    @Operation(summary = "Delete a meal stat")
+    @Operation(summary = "Delete a meal stat by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Meal stat deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Meal stat not found", content = @Content(mediaType = "text/plain"))

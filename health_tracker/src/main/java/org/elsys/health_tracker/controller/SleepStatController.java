@@ -58,7 +58,7 @@ public class SleepStatController {
         ).body(createdSleepStat);
     }
 
-    @Operation(summary = "Update a sleep stat")
+    @Operation(summary = "Update a sleep stat by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sleep stat updated successfully"),
             @ApiResponse(responseCode = "404", description = "Sleep stat not found", content = @Content(mediaType = "text/plain")),
@@ -69,7 +69,7 @@ public class SleepStatController {
         return ResponseEntity.ok(sleepStatService.update(sleepStatResource, id));
     }
 
-    @Operation(summary = "Delete a sleep stat")
+    @Operation(summary = "Delete a sleep stat by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Sleep stat deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Sleep stat not found", content = @Content(mediaType = "text/plain"))

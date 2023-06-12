@@ -1,0 +1,1139 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: https://health-tracker.grayflower-c85606c1.westeurope.azurecontainerapps.io
+  description: Generated server url
+paths:
+  /api/v1/workouts-stats/{id}:
+    get:
+      tags:
+      - workout-stat-controller
+      summary: Get a workout stat by id
+      operationId: getById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Workout stat retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/WorkoutStatResource'
+        "404":
+          description: Workout stat not found
+          content:
+            text/plain: {}
+    put:
+      tags:
+      - workout-stat-controller
+      summary: Update a workout stat by id
+      operationId: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkoutStatResource'
+        required: true
+      responses:
+        "409":
+          description: Workout stat is not changed
+          content:
+            text/plain: {}
+        "200":
+          description: Workout stat updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/WorkoutStatResource'
+        "404":
+          description: Workout stat not found
+          content:
+            text/plain: {}
+    delete:
+      tags:
+      - workout-stat-controller
+      summary: Delete a workout stat by id
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Workout stat deleted successfully
+          content:
+            '*/*':
+              schema:
+                type: object
+        "404":
+          description: Workout stat not found
+          content:
+            text/plain: {}
+  /api/v1/users/{id}:
+    get:
+      tags:
+      - user-controller
+      summary: Get a user by id
+      operationId: getById_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: User retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserResource'
+        "404":
+          description: User not found
+          content:
+            text/plain: {}
+    put:
+      tags:
+      - user-controller
+      summary: Update a user by id
+      operationId: update_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserResource'
+        required: true
+      responses:
+        "200":
+          description: User updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserResource'
+        "404":
+          description: User not found
+          content:
+            text/plain: {}
+        "409":
+          description: User is not changed
+          content:
+            text/plain: {}
+    delete:
+      tags:
+      - user-controller
+      summary: Delete a user by id
+      operationId: delete_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: User deleted successfully
+          content:
+            '*/*':
+              schema:
+                type: object
+        "404":
+          description: User not found
+          content:
+            text/plain: {}
+  /api/v1/sleep-stats/{id}:
+    get:
+      tags:
+      - sleep-stat-controller
+      summary: Get a sleep stat by id
+      operationId: getById_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Sleep stat not found
+          content:
+            text/plain: {}
+        "200":
+          description: Sleep stat retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SleepStatResource'
+    put:
+      tags:
+      - sleep-stat-controller
+      summary: Update a sleep stat by id
+      operationId: update_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SleepStatResource'
+        required: true
+      responses:
+        "409":
+          description: Sleep stat is not changed
+          content:
+            text/plain: {}
+        "200":
+          description: Sleep stat updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SleepStatResource'
+        "404":
+          description: Sleep stat not found
+          content:
+            text/plain: {}
+    delete:
+      tags:
+      - sleep-stat-controller
+      summary: Delete a sleep stat by id
+      operationId: delete_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Sleep stat not found
+          content:
+            text/plain: {}
+        "204":
+          description: Sleep stat deleted successfully
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/profiles/{id}:
+    get:
+      tags:
+      - profile-controller
+      summary: Get a profile by id
+      operationId: getById_3
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Profile retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProfileResource'
+        "404":
+          description: Profile not found
+          content:
+            text/plain: {}
+    put:
+      tags:
+      - profile-controller
+      summary: Update a profile by id
+      operationId: update_3
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileResource'
+        required: true
+      responses:
+        "200":
+          description: Profile updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProfileResource'
+        "409":
+          description: Profile is not changed
+          content:
+            text/plain: {}
+        "404":
+          description: Profile not found
+          content:
+            text/plain: {}
+    delete:
+      tags:
+      - profile-controller
+      summary: Delete a profile by id
+      operationId: delete_3
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Profile deleted successfully
+          content:
+            '*/*':
+              schema:
+                type: object
+        "404":
+          description: Profile not found
+          content:
+            text/plain: {}
+  /api/v1/meals/{id}:
+    get:
+      tags:
+      - meal-controller
+      summary: Get a meal by id
+      operationId: getById_4
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Meal not found
+          content:
+            text/plain: {}
+        "200":
+          description: Meal retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MealResource'
+    put:
+      tags:
+      - meal-controller
+      summary: Update a meal by id
+      operationId: update_4
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MealResource'
+        required: true
+      responses:
+        "409":
+          description: Meal is not changed
+          content:
+            text/plain: {}
+        "404":
+          description: Meal not found
+          content:
+            text/plain: {}
+        "200":
+          description: Meal updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MealResource'
+    delete:
+      tags:
+      - meal-controller
+      summary: Delete a meal by id
+      operationId: delete_4
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Meal not found
+          content:
+            text/plain: {}
+        "204":
+          description: Meal deleted successfully
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/meals-stats/{id}:
+    get:
+      tags:
+      - meal-stat-controller
+      summary: Get a meal stat by id
+      operationId: getById_5
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Meal stat retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MealStatResource'
+        "404":
+          description: Meal stat not found
+          content:
+            text/plain: {}
+    put:
+      tags:
+      - meal-stat-controller
+      summary: Update a meal stat by id
+      operationId: update_5
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MealStatResource'
+        required: true
+      responses:
+        "200":
+          description: Meal stat updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MealStatResource'
+        "409":
+          description: Meal stat is not changed
+          content:
+            text/plain: {}
+        "404":
+          description: Meal stat not found
+          content:
+            text/plain: {}
+    delete:
+      tags:
+      - meal-stat-controller
+      summary: Delete a meal stat by id
+      operationId: delete_5
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Meal stat deleted successfully
+          content:
+            '*/*':
+              schema:
+                type: object
+        "404":
+          description: Meal stat not found
+          content:
+            text/plain: {}
+  /api/v1/workouts-stats:
+    get:
+      tags:
+      - workout-stat-controller
+      summary: Get all workout stats
+      operationId: getAll
+      responses:
+        "200":
+          description: All workout stats retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkoutStatResource'
+    post:
+      tags:
+      - workout-stat-controller
+      summary: Create a workout stat
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkoutStatResource'
+        required: true
+      responses:
+        "404":
+          description: Foreign key constraint violation
+          content:
+            text/plain: {}
+        "201":
+          description: Workout stat created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/WorkoutStatResource'
+  /api/v1/sleep-stats:
+    get:
+      tags:
+      - sleep-stat-controller
+      summary: Get all sleep stats
+      operationId: getAll_2
+      responses:
+        "200":
+          description: All sleep stats retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SleepStatResource'
+    post:
+      tags:
+      - sleep-stat-controller
+      summary: Create a new sleep stat
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SleepStatResource'
+        required: true
+      responses:
+        "201":
+          description: Sleep stat created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SleepStatResource'
+        "404":
+          description: Foreign key constraint violation
+          content:
+            text/plain: {}
+  /api/v1/meals:
+    get:
+      tags:
+      - meal-controller
+      summary: Get all meals
+      operationId: getAll_4
+      responses:
+        "200":
+          description: All meals retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MealResource'
+    post:
+      tags:
+      - meal-controller
+      summary: Create a new meal
+      operationId: create_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MealResource'
+        required: true
+      responses:
+        "409":
+          description: Meal already exists
+          content:
+            text/plain: {}
+        "201":
+          description: Meal created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MealResource'
+  /api/v1/meals-stats:
+    get:
+      tags:
+      - meal-stat-controller
+      summary: Get all meal stats
+      operationId: getAll_5
+      responses:
+        "200":
+          description: All meal stats retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MealStatResource'
+    post:
+      tags:
+      - meal-stat-controller
+      summary: Create a new meal stat
+      operationId: create_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MealStatResource'
+        required: true
+      responses:
+        "404":
+          description: Foreign key constraint violation
+          content:
+            text/plain: {}
+        "201":
+          description: Meal stat created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MealStatResource'
+  /api/v1/auth/register:
+    post:
+      tags:
+      - auth-controller
+      summary: Register a new user
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
+      responses:
+        "401":
+          description: Username already exists
+          content:
+            text/plain: {}
+        "200":
+          description: User registered successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /api/v1/auth/login:
+    post:
+      tags:
+      - auth-controller
+      summary: Login a user
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        "200":
+          description: User logged in successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        "401":
+          description: Invalid username or password
+          content:
+            text/plain: {}
+  /api/v1/users:
+    get:
+      tags:
+      - user-controller
+      summary: Get all users
+      operationId: getAll_1
+      responses:
+        "200":
+          description: All users retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResource'
+  /api/v1/users/{id}/workouts-stats:
+    get:
+      tags:
+      - user-controller
+      summary: Get all workout stats of a user providing id
+      operationId: getWorkoutStatsByUserId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: User not found
+          content:
+            text/plain: {}
+        "200":
+          description: All workout stats retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserWorkoutStatResource'
+  /api/v1/users/{id}/sleep-stats:
+    get:
+      tags:
+      - user-controller
+      summary: Get all sleep stats of a user providing id
+      operationId: getSleepStatsByUserId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: All sleep stats retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSleepStatResource'
+        "404":
+          description: User not found
+          content:
+            text/plain: {}
+  /api/v1/users/{id}/meals-stats:
+    get:
+      tags:
+      - user-controller
+      summary: Get all meal stats of a user providing id
+      operationId: getMealStatsByUserId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: All meal stats retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserMealStatResource'
+        "404":
+          description: User not found
+          content:
+            text/plain: {}
+  /api/v1/sleep-stats/quality-statuses:
+    get:
+      tags:
+      - sleep-stat-controller
+      summary: Get all quality statuses
+      operationId: getAllQualityStatuses
+      responses:
+        "200":
+          description: All quality statuses retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum:
+                  - GOOD
+                  - BAD
+                  - NEUTRAL
+  /api/v1/profiles:
+    get:
+      tags:
+      - profile-controller
+      summary: Get all profiles
+      operationId: getAll_3
+      responses:
+        "200":
+          description: All profiles retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProfileResource'
+  /api/v1/profiles/{id}/lastVersion:
+    get:
+      tags:
+      - profile-controller
+      summary: Get last version of a profile before certain date providing profile
+        id
+      operationId: getLastVerBeforeDate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      responses:
+        "200":
+          description: Profile retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProfileResource'
+        "404":
+          description: Profile not found
+          content:
+            text/plain: {}
+  /api/v1/profiles/genders:
+    get:
+      tags:
+      - profile-controller
+      summary: Get all gender options
+      operationId: getAllGenders
+      responses:
+        "200":
+          description: All gender options retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum:
+                  - MALE
+                  - FEMALE
+                  - OTHER
+                  - PREFER_NOT_TO_SAY
+  /api/v1/meals/name/{name}:
+    get:
+      tags:
+      - meal-controller
+      summary: Get a meal by name
+      operationId: getByName
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "404":
+          description: Meal not found
+          content:
+            text/plain: {}
+        "200":
+          description: Meal retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MealResource'
+components:
+  schemas:
+    WorkoutStatResource:
+      required:
+      - burned_calories
+      - date
+      - duration
+      - user_id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        duration:
+          minimum: 1
+          type: integer
+          format: int32
+        date:
+          type: string
+        user_id:
+          type: integer
+          format: int64
+        burned_calories:
+          minimum: 1
+          type: integer
+          format: int32
+        workout_bio:
+          type: string
+    UserResource:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          maxLength: 64
+          minLength: 2
+          type: string
+        password:
+          maxLength: 64
+          minLength: 8
+          type: string
+        profile_id:
+          type: integer
+          format: int64
+    SleepStatResource:
+      required:
+      - date
+      - duration
+      - quality_status
+      - user_id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        duration:
+          minimum: 1
+          type: integer
+          format: int32
+        date:
+          type: string
+        user_id:
+          type: integer
+          format: int64
+        quality_status:
+          type: string
+          enum:
+          - GOOD
+          - BAD
+          - NEUTRAL
+    ProfileResource:
+      required:
+      - birthday
+      - body_fat
+      - gender
+      - height
+      - weight
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        gender:
+          type: string
+          enum:
+          - MALE
+          - FEMALE
+          - OTHER
+          - PREFER_NOT_TO_SAY
+        birthday:
+          type: string
+        height:
+          minimum: 0.0
+          exclusiveMinimum: true
+          type: number
+          format: float
+        weight:
+          minimum: 0.0
+          exclusiveMinimum: true
+          type: number
+          format: float
+        body_fat:
+          maximum: 100.0
+          exclusiveMaximum: true
+          minimum: 0.0
+          exclusiveMinimum: true
+          type: number
+          format: float
+        health_bio:
+          type: string
+    MealResource:
+      required:
+      - calories
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          maxLength: 64
+          minLength: 2
+          type: string
+        calories:
+          minimum: 0
+          type: integer
+          format: int32
+    MealStatResource:
+      required:
+      - date
+      - meal_id
+      - user_id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+        meal_id:
+          type: integer
+          format: int64
+        user_id:
+          type: integer
+          format: int64
+    RegisterRequest:
+      required:
+      - password
+      - profile
+      - username
+      type: object
+      properties:
+        username:
+          maxLength: 64
+          minLength: 2
+          type: string
+        password:
+          maxLength: 64
+          minLength: 8
+          type: string
+        profile:
+          $ref: '#/components/schemas/ProfileResource'
+    AuthResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        profile:
+          $ref: '#/components/schemas/ProfileResource'
+        sleep_stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserSleepStatResource'
+        meal_stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserMealStatResource'
+        workout_stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserWorkoutStatResource'
+    UserMealStatResource:
+      required:
+      - date
+      - meal
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        meal:
+          $ref: '#/components/schemas/MealResource'
+        date:
+          type: string
+    UserSleepStatResource:
+      required:
+      - date
+      - quality_status
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        duration:
+          minimum: 1
+          type: integer
+          format: int32
+        date:
+          type: string
+        quality_status:
+          type: string
+          enum:
+          - GOOD
+          - BAD
+          - NEUTRAL
+    UserWorkoutStatResource:
+      required:
+      - date
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        duration:
+          minimum: 1
+          type: integer
+          format: int32
+        date:
+          type: string
+        burned_calories:
+          minimum: 1
+          type: integer
+          format: int32
+        workout_bio:
+          type: string
+    LoginRequest:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          maxLength: 64
+          minLength: 2
+          type: string
+        password:
+          maxLength: 64
+          minLength: 8
+          type: string
