@@ -1,5 +1,5 @@
 <h1 align="center">
-  Azure Spring Boot Api
+  Azure Spring Boot API
 </h1>
 
 ### Contents:
