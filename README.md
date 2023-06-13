@@ -14,4 +14,4 @@ The Azure Spring Boot API application is developed as a comprehensive Health Tra
 ## Database
 The Health Tracker System, powered by MySQL as its database management system, effectively stores and organizes health-related data in six tables: users, profiles, sleep-stats, meals-stats, meals, and workouts. Each table serves a distinct purpose, ensuring the management of essential information. In addition to the primary tables, the system incorporates audit tables exclusively for the "profiles" and "users" tables. These audit tables serve as a reliable mechanism for tracking and logging any modifications or changes made to the data within these tables. By capturing and retaining a comprehensive history of alterations, the system promotes transparency and accountability, enhancing data governance and compliance measures. The relationships between the tables are depicted in the following diagram:
 
-<img alt="image" src="https://github.com/KristiyanBogdanov/Personal-health-tracker-system/blob/main/db_relationships.png">
+<img alt="image" src="https://github.com/KristiyanBogdanov/Azure-Spring-Boot-API/blob/main/documentation/db-relationships.png">
